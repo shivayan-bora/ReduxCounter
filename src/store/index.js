@@ -1,31 +1,26 @@
-// Used to create a store
-import { createStore } from "redux";
+import { configureStore, createSlice } from "@reduxjs/toolkit";
 
 
-const reducerFn = (state = {counter: 0}, action) => {
-    // Limitations:
-    // 1. It handles only syncronous actions
-    // 2. We shouldn't mutate the original state
-    switch (action.type) {
-        case "INCREMENT":
-            return {
-                ...state,
-                counter: state.counter + 1
-            };
-        case "DECREMENT":
-            return {
-                ...state,
-                counter: state.counter - 1
-            };
-        case "ADD_BY":
-            return {
-                ...state,
-                counter: state.counter + action.payload
-            };
-        default:
-            return state;
+const counterSlice = createSlice({
+    name: "counter",
+    initialState: {counter: 0},
+    reducers: {
+        increment: state => {
+            state.counter += 1
+        },
+        decrement: state => {
+            state.counter -= 1
+        },
+        addBy: (state, action) => {
+            state.counter += action.payload
         }
-}
+    }
+})
 
-const store = createStore(reducerFn)
+export const actions = counterSlice.actions
+
+const store = configureStore({
+    reducer: counterSlice.reducer
+})
+
 export default store
